@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>News Feed</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <!-- /Bootstrap -->
+  <link rel="stylesheet" href="../static/style.css" />
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <!-- /JQuery -->
+</head>
+<body>
+<div class="hstack">
+  <div><h1>News Feed</h1></div>
+  <div class="ms-auto">
+    <select class="form-select" id="newsSource">
+      <option value="">All</option>
+      {% for key in select %}
+        <option value="{{ key }}"
+        {% if key == selected %}
+            selected="true"
+        {% endif %}
+        >{{ key }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+<div class="accordion" id="accordionExample">
+{% for i in range(0, len) %}
+  <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{ i }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ i }}" aria-expanded="true" aria-controls="collapse{{ i }}">
+          <strong>{{ data[i]['title'] }}</strong>&nbsp;{{ data[i]['published'] }}
+        </button>
+      </h2>
+      <div id="collapse{{ i }}" class="accordion-collapse collapse" aria-labelledby="heading{{ i }}" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <p>{{ data[i]['summary'] }}</p>
+          <p><a href="{{ data[i]['link'] }}">{{ data[i]['link'] }}</a></p>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+</div>
+<div class="d-flex justify-content-end">
+  {% if prev > -1 %}
+  <a href="/?page={{ prev }}">Previous</a>&nbsp;
+  {% endif %}
+  {% if next > -1 %}
+  <a href="/?page={{ next }}">Next</a>
+  {% endif %}
+</div>
+</body>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+<!-- /Bootstrap -->
+<script>
+  $(window).on('load', function() {
+      $("#newsSource").change(function() {
+          window.location = '/?source=' + $(this).find('option:selected').val()
+      });
+  });
+</script>
+</html>
